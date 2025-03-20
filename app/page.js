@@ -1,7 +1,10 @@
 "use client"
 import Todo from "@/Components/Todo";
+import axios from "axios";
 import Image from "next/image";
 import {useState} from "react";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export default function Home() {
 
@@ -17,9 +20,28 @@ export default function Home() {
     console.log(formData);
   }
 
+  const onSubmitHandle = async(e) => {
+    e.preventDefault();
+
+    try {
+      //api code
+
+      const response = await axios.post('/api', formData);
+      toast.success(response.data.msg);
+      setFormData({
+        title:"",
+        description:"",
+      })
+    }catch(error){
+      toast.error("Error")
+    }
+  }
+
   return (
     <>
-      <form className="flex items-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
+    <ToastContainer theme="dark"
+    />
+      <form onSubmit={onSubmitHandle} className="flex items-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
         <input
           onChange={onChangeHandler}
           value={formData.title}
